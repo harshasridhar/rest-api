@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Main Page</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.4.0.min.js"
+  integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  	var outputs = {};
+  	var columns = ['frame_time_epoch', 'frame_len', 'eth_src', 'eth_dst', 'ip_src',
+       'ip_dst', 'tcp_srcport', 'tcp_dstport', 'udp_srcport', 'udp_dstport',
+       'icmp_type', 'icmp_code', 'arp_opcode', 'arp_src_hw_mac',
+       'arp_src_proto_ipv4', 'arp_dst_hw_mac', 'arp_dst_proto_ipv4',
+       'ipv6_src', 'ipv6_dst', 'output'];
+  	$(document).ready(function(){
+  		$("#load").hide();
+  		$("#getRecords").click(function() {
+  			$("#system").css("background-color","white");
+  			$("#actual").css("background-color","white");
+  			$("#body").empty();
+  			$.get("data",function(data){
+  				var parsed_data = JSON.parse(data);
+  				// console.log(parsed_data[0]);
+  				for(var i=0;i<10;i++){
+  					var contents="<tr id='row_"+i+"' onmouseover='changeColor(this,true);' onmouseout='changeColor(this, false);' onclick='thisRow(this.id);'><td>";
+  					contents += parsed_data[i].frame_time_epoch+"</td><td>"+parsed_data[i].frame_len+"</td><td>"+parsed_data[i].eth_src+"</td><td>"+parsed_data[i].eth_dst+"</td><td>"+parsed_data[i].ip_src+"</td><td>"+parsed_data[i].ip_dst+"</td><td>"+parsed_data[i].tcp_srcport+"</td><td>"+parsed_data[i].tcp_dstport+"</td><td>"+parsed_data[i].udp_srcport+"</td><td>"+parsed_data[i].udp_dstport+"</td><td>"+parsed_data[i].icmp_type+"</td><td>"+parsed_data[i].icmp_code+"</td><td>"+parsed_data[i].arp_opcode+"</td><td>"+parsed_data[i].arp_src_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].arp_dst_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].ipv6_src+"</td><td>"+parsed_data[i].ipv6_dst+"</td></tr>";
+  					$("#body").append(contents);
+  					outputs["row_"+i]=parsed_data[i].output;
+  				}
+  				console.log(outputs);
+  			
+  			});	
+  		});
+  	});
+  	function changeColor(tableRow, highLight)
+    {
+    if (highLight)
+    {
+      tableRow.style.backgroundColor = '#dcfac9';
+    }
+    else
+    {
+      tableRow.style.backgroundColor = 'white';
+    }
+  }
+  function thisRow(table){
+  	$("#load").show();
+  	$("#system").css("background-color","white");
+  	$("#actual").css("background-color","white");
+  	$.get('test',function(data){
+  		$("#load").hide();
+  		if (data == "Normal"){
+  			$("#system").css("background-color","green");
+  		}
+  		else{
+  			$("#system").css("background-color","red");
+  		}
+  		if(outputs[table] == 0){
+  			$("#actual").css("background-color","green");
+  		}
+  		else{
+  			$("#actual").css("background-color","red");
+  		}
+  		// alert('Testing done Predicted Class:'+data);
+  	});
+  }
+  </script>
+</head>
+<body>
+	<div class="row">
+		<div class="col sm-6">
+			<h2>Test Page</h2>
+			<button id="getRecords">Get Records</button>
+		</div>
+		<div id="system" class="col sm-3" style="border: 3px solid black">
+			<h4>System Prediction</h4>
+		</div>
+		<div id="actual" class="col sm-3" style="border: 3px solid black">
+			<h4>Actual Prediction</h4>
+		</div>
+	</div>
+	<h3>Select The row which you need to test</h3>
+<!-- frame.time_epoch,frame.len,eth.src,eth.dst,ip.src,ip.dst,tcp.srcport,tcp.dstport,udp.srcport,udp.dstport,icmp.type,icmp.code,arp.opcode,arp.src.hw_mac,arp.src.proto_ipv4,arp.dst.hw_mac,arp.dst.proto_ipv4,ipv6.src,ipv6.dst -->
+ <div class="progress" id="load">
+      <div class="indeterminate"></div>
+  </div>
+<table class="responsive-table" id="table">
+	<thead>
+		<tr>
+			<td>frame.time_epoch</td>
+			<td>frame.len</td>
+			<td>eth.src</td>
+			<td>eth.dst</td>
+			<td>ip.src</td>
+			<td>ip.dst</td>
+			<td>tcp.srcport</td>
+			<td>tcp.dstport</td>
+			<td>udp.srcport</td>
+			<td>udp.dstport</td>
+			<td>icmp.type</td>
+			<td>icmp.code</td>
+			<td>arp.opcode</td>
+			<td>arp.src.hw_mac</td>
+			<td>arp.src.proto_ipv4</td>
+			<td>arp.dst.hw_mac</td>
+			<td>arp.dst.proto_ipv4</td>
+			<td>ipv6.src</td>
+			<td>ipv6.dst</td>
+		</tr>
+	</thead>
+	<tbody id="body">
+		<!-- <tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="one" onclick="thisRow(this.id);">
+			<td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
+		</tr>
+		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="two" onclick="thisRow(this.id);">
+			<td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td>
+		</tr>
+		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="three" onclick="thisRow(this.id);">
+			<td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td>
+		</tr>
+		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="four" onclick="thisRow(this.id);">
+			<td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td>
+		</tr> -->
+	</tbody>
+</table>
+</body>
+</html>
