@@ -102,8 +102,19 @@
 </head>
 <body>
 	<div class="row">
+  		<div class="col s12" style="text-align: left;background-color: darkblue; color: white">
+    		<a href="main" style="color:white">Main </a> |
+    		<a href="results" style="color:white">Results </a> |
+  		</div>
+  		<div class="col s12" style="text-align: left; background-color: gold;">
+    		<h4>Test Page</h4>
+  		</div>
+	</div>
+	
+	
+	<div class="row">
 		<div class="col sm-4">
-			<h2>Test Page</h2>
+			<!-- <h2>Test Page</h2> -->
 			<label>Choose the Algorithm</label>
 			<label>
 				<input type="checkbox" id="rfc"  onclick="chooseAlgo(this.id);" checked />
@@ -121,13 +132,16 @@
 			<h4>System Prediction</h4>
 		</div>
 		<div class="col sm-2">
-			<p id="result"></p>
+			
 		</div>
 		<div id="actual" class="col sm-3" style="border: 3px solid black">
 			<h4>Actual Prediction</h4>
 		</div>
+		<div class="col sm-2">
+			<p style="font-weight: bold; padding:0px">Key:<br> -<span style="color:red"> Attack Packets</span><br> -<span style="color:green"> Normal Packets</span></p>
+		</div>
 	</div>
-	<h3>Select The row which you need to test</h3>
+	<h4>Select the row which you need to test</h4>
  <div class="progress" id="load">
       <div class="indeterminate"></div>
   </div>

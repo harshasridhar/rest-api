@@ -4,7 +4,7 @@ import pandas
 from sklearn.utils import shuffle
 from random import randint
 from pickle import load
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 et_trained_model = load(open('trained_models/et_trained_model','rb'))
 rf_trained_model = load(open('trained_models/rf_trained_model','rb'))
 def testFunc():
@@ -43,6 +43,7 @@ def postFunction():
 	list.append(test_data)
 	val = model.predict(list)
 	return str(val[0])
+
 @app.route("/data", methods =['GET'])
 def getData():
 	df= pandas.read_csv('data.csv')
@@ -57,6 +58,10 @@ def getData():
 	df.reset_index(inplace=True)
 	response = df[:][:10].to_json(orient='index')
 	return response 
+
+@app.route("/results",methods=['GET'])
+def showResults():
+	return render_template("results.html")
 
 if __name__ == '__main__':
 	app.run(debug=True)
