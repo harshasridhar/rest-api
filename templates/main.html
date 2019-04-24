@@ -30,7 +30,7 @@
   					$("#body").append(contents);
   					outputs["row_"+i]=parsed_data[i].output;
   				}
-  				console.log(outputs);
+  				//console.log(outputs);
   			
   			});	
   		});
@@ -50,6 +50,31 @@
   	$("#load").show();
   	$("#system").css("background-color","white");
   	$("#actual").css("background-color","white");
+	var list = [];
+	$("#"+table).each(function(){
+		$(this).find('td').each (function( column, td) {
+			var data = { "val" : parseFloat(td.innerHTML)};
+			//console.log(data);
+			//list.push(data);
+			list.push(parseFloat(td.innerHTML));
+			//console.log(td.innerHTML);
+		});
+		//var frame_time_epoch = $(this).find("frame_time_epoch").val();
+		//console.log(frame_time_epoch);
+	});
+	var test_data = {"test_data":(list)}
+	$.ajax({
+		type: "POST",
+      		url: "test",
+      		data: JSON.stringify(test_data),
+		contentType:"application/json; charset=utf-8",
+      		dataType: "json",
+		success: function(data){ 
+            		$("#result").html(data); 
+        	 }	
+	});
+	//$.post('test',test_data);
+	console.log(list);
   	$.get('test',function(data){
   		$("#load").hide();
   		if (data == "Normal"){
@@ -71,12 +96,16 @@
 </head>
 <body>
 	<div class="row">
-		<div class="col sm-6">
+		<div class="col sm-4">
 			<h2>Test Page</h2>
 			<button id="getRecords">Get Records</button>
 		</div>
+		<br>
 		<div id="system" class="col sm-3" style="border: 3px solid black">
 			<h4>System Prediction</h4>
+		</div>
+		<div class="col sm-2">
+			<p id="result"></p>
 		</div>
 		<div id="actual" class="col sm-3" style="border: 3px solid black">
 			<h4>Actual Prediction</h4>

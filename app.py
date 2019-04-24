@@ -16,7 +16,7 @@ def index():
 def getPage():
 	# return 'GET request made from the server'
 	t = "*"
-	for i in range(2000): #just to simulate processing delay
+	for i in range(80000): #just to simulate processing delay
 		t +="*"*i
 		t +="<br>"
 	r = randint(0,1)
@@ -27,9 +27,16 @@ def getPage():
 def mainPage():
 	return render_template("main.html")
 
-# @app.route("/test",methods =['POST'])
-# def postFunction():
-# 	return "hello"
+@app.route("/test",methods =['POST'])
+def postFunction():
+	print("POST request handling, data obtained:")
+	test_data =request.json['test_data']
+	# here we will call the model for prediction
+	sum = 0
+	for i in range(len(test_data)):
+		sum += i*test_data[i]
+	print(sum)
+	return str(sum)
 @app.route("/data", methods =['GET'])
 def getData():
 	df= pandas.read_csv('data.csv')
