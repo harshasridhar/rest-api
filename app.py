@@ -3,8 +3,10 @@ from time import sleep
 import pandas
 from sklearn.utils import shuffle
 from random import randint
+from pickle import load
 app = Flask(__name__)
-
+et_trained_model = load(open('trained_models/et_trained_model','rb'))
+rf_trained_model = load(open('trained_models/rf_trained_model','rb'))
 def testFunc():
 	return 'Hello World'
 @app.route('/')
@@ -16,7 +18,7 @@ def index():
 def getPage():
 	# return 'GET request made from the server'
 	t = "*"
-	for i in range(80000): #just to simulate processing delay
+	for i in range(2000): #just to simulate processing delay
 		t +="*"*i
 		t +="<br>"
 	r = randint(0,1)
@@ -30,13 +32,17 @@ def mainPage():
 @app.route("/test",methods =['POST'])
 def postFunction():
 	print("POST request handling, data obtained:")
-	test_data =request.json['test_data']
+	test_data = request.json['test_data']
+	algorithm = request.json['algorithm']
+	if algorithm == "rfc":
+		model = rf_trained_model
+	else:
+		model = et_trained_model
 	# here we will call the model for prediction
-	sum = 0
-	for i in range(len(test_data)):
-		sum += i*test_data[i]
-	print(sum)
-	return str(sum)
+	list = []
+	list.append(test_data)
+	val = model.predict(list)
+	return str(val[0])
 @app.route("/data", methods =['GET'])
 def getData():
 	df= pandas.read_csv('data.csv')

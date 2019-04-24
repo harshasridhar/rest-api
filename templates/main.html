@@ -30,26 +30,22 @@
   					$("#body").append(contents);
   					outputs["row_"+i]=parsed_data[i].output;
   				}
-  				//console.log(outputs);
-  			
   			});	
   		});
   	});
   	function changeColor(tableRow, highLight)
     {
-    if (highLight)
-    {
-      tableRow.style.backgroundColor = '#dcfac9';
-    }
-    else
-    {
-      tableRow.style.backgroundColor = 'white';
-    }
-  }
-  function thisRow(table){
-  	$("#load").show();
-  	$("#system").css("background-color","white");
-  	$("#actual").css("background-color","white");
+    	if (highLight){
+      		tableRow.style.backgroundColor = '#dcfac9';
+    	}
+    	else{
+      		tableRow.style.backgroundColor = 'white';
+      	}
+  	}
+	function thisRow(table){
+		$("#load").show();
+		$("#system").css("background-color","white");
+		$("#actual").css("background-color","white");
 	var list = [];
 	$("#"+table).each(function(){
 		$(this).find('td').each (function( column, td) {
@@ -59,45 +55,65 @@
 			list.push(parseFloat(td.innerHTML));
 			//console.log(td.innerHTML);
 		});
-		//var frame_time_epoch = $(this).find("frame_time_epoch").val();
-		//console.log(frame_time_epoch);
 	});
-	var test_data = {"test_data":(list)}
+	var algorithm = $("#etc").is(":checked") ? "etc" : "rfc";
+	var test_data = {"test_data":(list), "algorithm": algorithm};
 	$.ajax({
 		type: "POST",
-      		url: "test",
-      		data: JSON.stringify(test_data),
+	  		url: "test",
+	  		data: JSON.stringify(test_data),
 		contentType:"application/json; charset=utf-8",
-      		dataType: "json",
+	  		dataType: "json",
 		success: function(data){ 
-            		$("#result").html(data); 
-        	 }	
+	        		$("#result").html(data+" = "+ outputs[table]); 
+	        		$("#load").hide();
+			if (data == "0"){
+				$("#system").css("background-color","green");
+			}
+			else{
+				$("#system").css("background-color","red");
+			}
+			if(outputs[table] == 0){
+				$("#actual").css("background-color","green");
+			}
+			else{
+				$("#actual").css("background-color","red");
+			}
+	    	 }	
 	});
-	//$.post('test',test_data);
-	console.log(list);
-  	$.get('test',function(data){
-  		$("#load").hide();
-  		if (data == "Normal"){
-  			$("#system").css("background-color","green");
-  		}
-  		else{
-  			$("#system").css("background-color","red");
-  		}
-  		if(outputs[table] == 0){
-  			$("#actual").css("background-color","green");
-  		}
-  		else{
-  			$("#actual").css("background-color","red");
-  		}
-  		// alert('Testing done Predicted Class:'+data);
-  	});
-  }
+	}
+
+	function chooseAlgo(algorithm){
+		if(algorithm == "rfc"){
+			algo = "rfc";
+			if($("#etc").is(":checked")){
+				$("#etc").prop('checked', false);	
+			}	
+		}
+		if(algorithm == "etc"){
+			algo = "etc";
+			if($("#rfc").is(":checked")){
+				$("#rfc").prop('checked',false);
+			}
+		}
+	  }
+
   </script>
 </head>
 <body>
 	<div class="row">
 		<div class="col sm-4">
 			<h2>Test Page</h2>
+			<label>Choose the Algorithm</label>
+			<label>
+				<input type="checkbox" id="rfc"  onclick="chooseAlgo(this.id);" checked />
+				<span>Random forest Classifier</span>
+			</label>
+			<label>
+				<input type="checkbox" id="etc"  onclick="chooseAlgo(this.id);"/>
+				<span>Extra Trees Classifier</span>
+			</label>
+			<br>
 			<button id="getRecords">Get Records</button>
 		</div>
 		<br>
@@ -112,10 +128,13 @@
 		</div>
 	</div>
 	<h3>Select The row which you need to test</h3>
-<!-- frame.time_epoch,frame.len,eth.src,eth.dst,ip.src,ip.dst,tcp.srcport,tcp.dstport,udp.srcport,udp.dstport,icmp.type,icmp.code,arp.opcode,arp.src.hw_mac,arp.src.proto_ipv4,arp.dst.hw_mac,arp.dst.proto_ipv4,ipv6.src,ipv6.dst -->
  <div class="progress" id="load">
       <div class="indeterminate"></div>
   </div>
+  	<select>
+  		<option>Random Forest</option>
+  		<option>Extra Trees Classifier</option>
+  	</select>
 <table class="responsive-table" id="table">
 	<thead>
 		<tr>
@@ -141,18 +160,6 @@
 		</tr>
 	</thead>
 	<tbody id="body">
-		<!-- <tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="one" onclick="thisRow(this.id);">
-			<td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td>
-		</tr>
-		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="two" onclick="thisRow(this.id);">
-			<td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td>
-		</tr>
-		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="three" onclick="thisRow(this.id);">
-			<td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td>
-		</tr>
-		<tr onmouseover="changeColor(this,true);" onmouseout="changeColor(this, false);" id="four" onclick="thisRow(this.id);">
-			<td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td><td>4</td>
-		</tr> -->
 	</tbody>
 </table>
 </body>
