@@ -4,10 +4,38 @@
 	<title>Results</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script
   src="https://code.jquery.com/jquery-3.4.0.min.js"
   integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
   crossorigin="anonymous"></script>
+	<script>
+		google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Algorithm', 'Iteration 1', 'Iteration 2', 'Iteration 3','Iteration 4'],
+          ['Random Forest', 55.48, 100, 100,91.43],
+          ['Extra Trees', 83.36, 99.996, 99.993,90.79],
+          ['Multilayer Perceptron',84.084,84.084,84.084,84.084],
+          ['MiniBatchKMeans',86.48,12.73,12.8,12.57],
+          ['KNearestNeighbors',63.87,0,0,0]
+        ]);
+
+        var options = {
+          chart: {
+            title: 'Algorithm Performance',
+            subtitle: 'Algorithm v/s Accuracy for 4 Iterations',
+          },
+          bars: 'vertical' // Required for Material Bar Charts.
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      }
+	</script>
 </head>
 <body>
 	<div class="row">
@@ -20,6 +48,88 @@
   		</div>
 	</div>
 	<div class="row">
+		<div class="col s12">
+			<div id="barchart_material" style="width: 1000px; height: 400px; margin: 0 auto;">	
+		</div>
+		<div class="col s12 m3">
+			<div class="card-panel hoverable" style="height: 600px">
+				<div style="background-color: gold; text-align:center">
+					<h5>RandomForest Classifier</h5>
+				</div>
+				<div class="card-image">
+					<img src="/static/random_forest.jpg" style="width: 100%">
+				</div>
+				<div class="card-content">
+					<p>
+						Random forests or random decision forests are an ensemble learning method for classification, regression and other tasks that operates by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes or mean prediction of the individual trees.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m3">
+			<div class="card-panel hoverable" style="height: 600px">
+				<div style="background-color: gold; text-align:center">
+					<h5>Extra Trees Classifier</h5>
+				</div><br>
+				<div class="card-image">
+					<img src="/static/extra_trees_classifier.png" style="width: 100%;">
+				</div><br>
+				<div class="card-content">
+					<p>
+						An “extra trees” classifier, otherwise known as an “Extremely randomized trees” classifier, is a variant of a random forest. Unlike a random forest, at each step the entire sample is used and decision boundaries are picked at random, rather than the best one. In real world cases, performance is comparable to an ordinary random forest, sometimes a bit better.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m3">
+			<div class="card-panel hoverable" style="height: 600px">
+				<div style="background-color: gold; text-align:center">
+					<h5>Multilayer Perceptron</h5>
+				</div>
+				<div class="card-image">
+					<img src="/static/multi_layer_perceptron.png" style="width: 100%;" >
+				</div>
+				<div class="card-content">
+					<p>
+						A multilayer perceptron (MLP) is a class of feedforward artificial neural network. A MLP consists of at least three layers of nodes: an input layer, a hidden layer and an output layer. Except for the input nodes, each node is a neuron that uses a nonlinear activation function. MLP utilizes a supervised learning technique called backpropagation for training. Its multiple layers and non-linear activation distinguish MLP from a linear perceptron. It can distinguish data that is not linearly separable.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		<div class="col s12 m3">
+			<div class="card-panel hoverable" style="height: 290px">
+				<div style="background-color: gold; text-align:center">
+					<h5>MiniBatch KMeans</h5>
+				</div>
+				<div class="card-image">
+					<img src="/static/extra_trees_classifier.png" style="width: 100%">
+				</div>
+				<div class="card-content">
+					<p>
+						This algorithm is the extension of the KMeans algorithm,it takes small batches(randomly chosen) for each iteration instead of the entire dataset.
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="col s12 m3">
+			<div class="card-panel hoverable" style="height: 290px">
+				<div style="background-color: gold; text-align:center">
+					<h5>KNearest Neighbors</h5>
+				</div>
+				<div clas="card-image">
+					<img src="/static/extra_trees_classifier.png" style="width:100%">
+				</div>
+				<div class="card-content">
+					<p>
+						k-NN is a type of instance-based/lazy learning, where the function is only approximated locally, all computation is deferred until classification. 
+					</p>
+				</div>	
+			</div>
+		</div>
+		</div>
+
+		<br><!--
 		<h3>Random Forest Classifier</h3>
 		<div class="col s6">
 			<img src="/static/random_forest.jpg" style="width:70%">
@@ -56,6 +166,6 @@
 		<div class="col s6">
 			<img src="/static/chart.png" style="width:80%">
 		</div>
-	</div>
+	</div>-->
 </body>
 </html>
