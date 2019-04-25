@@ -31,7 +31,6 @@ def mainPage():
 
 @app.route("/test",methods =['POST'])
 def postFunction():
-	print("POST request handling, data obtained:")
 	test_data = request.json['test_data']
 	algorithm = request.json['algorithm']
 	if algorithm == "rfc":
@@ -42,6 +41,7 @@ def postFunction():
 	list = []
 	list.append(test_data)
 	val = model.predict(list)
+	print("POST request handling, data obtained.\nAlgorithm Called: "+algorithm+"\nPredicted Value: "+str(val))
 	return str(val[0])
 
 @app.route("/data", methods =['GET'])
@@ -57,6 +57,7 @@ def getData():
        'ipv6_src', 'ipv6_dst', 'output']
 	df.reset_index(inplace=True)
 	response = df[:][:10].to_json(orient='index')
+	# print(response)
 	return response 
 
 @app.route("/results",methods=['GET'])

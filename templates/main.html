@@ -18,22 +18,24 @@
   	$(document).ready(function(){
   		$("#load").hide();
   		$("#getRecords").click(function() {
+        $("#getRecords").css("background-color","#cbf495");
   			$("#system").css("background-color","white");
   			$("#actual").css("background-color","white");
   			$("#body").empty();
   			$.get("data",function(data){
   				var parsed_data = JSON.parse(data);
-  				// console.log(parsed_data[0]);
-  				for(var i=0;i<10;i++){
-  					var contents="<tr id='row_"+i+"' onmouseover='changeColor(this,true);' onmouseout='changeColor(this, false);' onclick='thisRow(this.id);'><td>";
-  					contents += parsed_data[i].frame_time_epoch+"</td><td>"+parsed_data[i].frame_len+"</td><td>"+parsed_data[i].eth_src+"</td><td>"+parsed_data[i].eth_dst+"</td><td>"+parsed_data[i].ip_src+"</td><td>"+parsed_data[i].ip_dst+"</td><td>"+parsed_data[i].tcp_srcport+"</td><td>"+parsed_data[i].tcp_dstport+"</td><td>"+parsed_data[i].udp_srcport+"</td><td>"+parsed_data[i].udp_dstport+"</td><td>"+parsed_data[i].icmp_type+"</td><td>"+parsed_data[i].icmp_code+"</td><td>"+parsed_data[i].arp_opcode+"</td><td>"+parsed_data[i].arp_src_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].arp_dst_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].ipv6_src+"</td><td>"+parsed_data[i].ipv6_dst+"</td></tr>";
-  					$("#body").append(contents);
-  					outputs["row_"+i]=parsed_data[i].output;
+          // console.log(parsed_data[0]);
+          for(var i=0;i<10;i++){
+            var contents="<tr id='row_"+i+"' onmouseover='changeColor(this,true);' onmouseout='changeColor(this, false);' onclick='thisRow(this.id);'><td>";
+            contents += parsed_data[i].frame_time_epoch+"</td><td>"+parsed_data[i].frame_len+"</td><td>"+parsed_data[i].eth_src+"</td><td>"+parsed_data[i].eth_dst+"</td><td>"+parsed_data[i].ip_src+"</td><td>"+parsed_data[i].ip_dst+"</td><td>"+parsed_data[i].tcp_srcport+"</td><td>"+parsed_data[i].tcp_dstport+"</td><td>"+parsed_data[i].udp_srcport+"</td><td>"+parsed_data[i].udp_dstport+"</td><td>"+parsed_data[i].icmp_type+"</td><td>"+parsed_data[i].icmp_code+"</td><td>"+parsed_data[i].arp_opcode+"</td><td>"+parsed_data[i].arp_src_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].arp_dst_hw_mac+"</td><td>"+parsed_data[i].arp_dst_proto_ipv4+"</td><td>"+parsed_data[i].ipv6_src+"</td><td>"+parsed_data[i].ipv6_dst+"</td></tr>";
+            $("#body").append(contents);
+            outputs["row_"+i]=parsed_data[i].output;
   				}
   			});	
   		});
   	});
-  	function changeColor(tableRow, highLight)
+  	
+    function changeColor(tableRow, highLight)
     {
     	if (highLight){
       		tableRow.style.backgroundColor = '#dcfac9';
@@ -42,46 +44,47 @@
       		tableRow.style.backgroundColor = 'white';
       	}
   	}
-	function thisRow(table){
+	
+  function thisRow(table){
 		$("#load").show();
 		$("#system").css("background-color","white");
 		$("#actual").css("background-color","white");
-	var list = [];
-	$("#"+table).each(function(){
-		$(this).find('td').each (function( column, td) {
-			var data = { "val" : parseFloat(td.innerHTML)};
-			//console.log(data);
-			//list.push(data);
-			list.push(parseFloat(td.innerHTML));
-			//console.log(td.innerHTML);
-		});
-	});
-	var algorithm = $("#etc").is(":checked") ? "etc" : "rfc";
-	var test_data = {"test_data":(list), "algorithm": algorithm};
-	$.ajax({
-		type: "POST",
-	  		url: "test",
-	  		data: JSON.stringify(test_data),
-		contentType:"application/json; charset=utf-8",
-	  		dataType: "json",
-		success: function(data){ 
-	        		$("#result").html(data+" = "+ outputs[table]); 
-	        		$("#load").hide();
-			if (data == "0"){
-				$("#system").css("background-color","green");
-			}
-			else{
-				$("#system").css("background-color","red");
-			}
-			if(outputs[table] == 0){
-				$("#actual").css("background-color","green");
-			}
-			else{
-				$("#actual").css("background-color","red");
-			}
-	    	 }	
-	});
-	}
+  	var list = [];
+  	$("#"+table).each(function(){
+  		$(this).find('td').each (function( column, td) {
+  			var data = { "val" : parseFloat(td.innerHTML)};
+  			//console.log(data);
+  			//list.push(data);
+  			list.push(parseFloat(td.innerHTML));
+  			//console.log(td.innerHTML);
+  		});
+  	});
+  	var algorithm = $("#etc").is(":checked") ? "etc" : "rfc";
+  	var test_data = {"test_data":(list), "algorithm": algorithm};
+  	$.ajax({
+  		    type: "POST",
+  	  		url: "test",
+  	  		data: JSON.stringify(test_data),
+  		    contentType:"application/json; charset=utf-8",
+  	  		dataType: "json",
+  		    success: function(data){ 
+  	        		$("#result").html(data+" = "+ outputs[table]); 
+  	        		$("#load").hide();
+          			if (data == "0"){
+          				$("#system").css("background-color","green");
+          			}
+          			else{
+          				$("#system").css("background-color","red");
+          			}
+          			if(outputs[table] == 0){
+          				$("#actual").css("background-color","green");
+          			}
+          			else{
+          				$("#actual").css("background-color","red");
+          			}
+  	    	 }	
+  	    });
+  	}
 
 	function chooseAlgo(algorithm){
 		if(algorithm == "rfc"){
@@ -96,10 +99,11 @@
 				$("#rfc").prop('checked',false);
 			}
 		}
-	  }
+  }
 
   </script>
 </head>
+
 <body>
 	<div class="row">
   		<div class="col s12" style="text-align: left;background-color: darkblue; color: white">
@@ -115,8 +119,8 @@
 	<div class="row">
 		<div class="col sm-4">
 			<!-- <h2>Test Page</h2> -->
-			<label>Choose the Algorithm</label>
-			<label>
+			<label style="padding-right: 15px;font-size: 15px;">Choose the Algorithm</label>
+			<label style="padding-right: 15px;">
 				<input type="checkbox" id="rfc"  onclick="chooseAlgo(this.id);" checked />
 				<span>Random forest Classifier</span>
 			</label>
@@ -124,8 +128,8 @@
 				<input type="checkbox" id="etc"  onclick="chooseAlgo(this.id);"/>
 				<span>Extra Trees Classifier</span>
 			</label>
-			<br>
-			<button id="getRecords">Get Records</button>
+			<br><br>
+			<button id="getRecords" style="background-color: #a1c176;font-size: 16px;padding: 10px 15px;">Get Records</button>
 		</div>
 		<br>
 		<div id="system" class="col sm-3" style="border: 3px solid black">
@@ -145,10 +149,10 @@
  <div class="progress" id="load">
       <div class="indeterminate"></div>
   </div>
-  	<select>
+  	<!-- <select>
   		<option>Random Forest</option>
   		<option>Extra Trees Classifier</option>
-  	</select>
+  	</select> -->
 <table class="responsive-table" id="table">
 	<thead>
 		<tr>
