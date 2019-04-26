@@ -64,5 +64,9 @@ def getData():
 def showResults():
 	return render_template("results.html")
 
+@app.route("/kitsune",methods=["GET"])
+def showKitsune():
+	return render_template("kitsune.html")
+
 if __name__ == '__main__':
 	app.run(debug=True)
