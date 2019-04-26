@@ -39,16 +39,37 @@
   		<div class="col s12" style="text-align: left;background-color: darkblue; color: white">
     		<a href="main" style="color:white">Main </a> |
     		<a href="results" style="color:white">Results </a> |
-	        <a href="kitsune" style="color:white">Kitsune </a> |
+    		<a href="kitsune" style="color:white">Kitsune </a> |
   		</div>
   		<div class="col s12" style="text-align: left; background-color: gold;">
     		<h4>Results</h4>
   		</div>
 	</div>
 	<div class="row">
-		<div class="col s12">
-			<div id="barchart_material" style="width: 1000px; height: 400px; margin: 0 auto;">	
+		<div class="col s12 m9">
+			<div id="barchart_material" style=" height: 400px; ">	
 		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col s12 m3">
+			<br>
+			<table class="centered highlight">
+						<thead>
+							<tr><th>Algorithm</th><th>Avg. Training Time*</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>Extra Trees Classifier</td><td>7 seconds</td></tr>
+							<tr><td>Random Forest</td><td>8 seconds</td></tr>
+							<tr><td>Multilayer Perceptron</td><td>3 minutes</td></tr>
+							<tr><td>MiniBatch KMeans</td><td>6 minutes</td></tr>
+							<tr><td>K Nearest Neighbors</td><td>24 minutes</td></tr>
+						</tbody>
+					</table>
+					<p><b>*</b> - for 4 fold stratified</p>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col s12 m3">
 			<div class="card-panel hoverable" style="height: 600px">
 				<div style="background-color: gold; text-align:center">

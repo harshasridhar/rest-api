@@ -12,7 +12,7 @@ def testFunc():
 @app.route('/')
 def index():
 	# return "Hello, World!"
-	return render_template("index.html")
+	return render_template("main.html")
 
 @app.route('/test',methods = ['GET'])
 def getPage():
